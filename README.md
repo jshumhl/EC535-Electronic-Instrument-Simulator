@@ -35,11 +35,11 @@ With Debian 11.7 installed the login:password would be [debian:temppwd]. Python 
    sudo apt install alsa-utils
 
 3. **Setup Python Environment**:
-   pip install pygame
-   pip install Adafruit_BBIO
-   pip install time
-   pip install openai
-   pip install mido
+   - pip install pygame
+   - pip install Adafruit_BBIO
+   - pip install time
+   - pip install openai
+   - pip install mido
 
 5. **Clone the Repository**:
    git clone [https://github.com/yourgithub/yourproject.git](https://github.com/jshumhl/EC535_Project.git)
