@@ -43,7 +43,7 @@ With Debian 11.7 installed the login:password would be [debian:temppwd]. Python 
    - pip install mido
 
 5. **Clone the Repository**:
-   - git clone [https://github.com/yourgithub/yourproject.git](https://github.com/jshumhl/EC535_Project.git)
+   - git clone [[https://github.com/yourgithub/yourproject.git](https://github.com/jshumhl/EC535-Electronic-Instrument-Simulator.git)
    
 6. **Running the Script:**:
    - python main.py
