@@ -2,7 +2,7 @@
 ## Author: Team 13: Hin Lui Shum, Xulun Huang
 
 ## Description
-This final project is a electronic musical instrument using a BeagleBone Black that includes interactive menu controls to switch between different functionalities like recording, playback, and switching between instrument choices of piano and guitar.
+This project is an electronic musical instrument using a BeagleBone Black that allows switching instrument between piano and guitar. An interactive menu controls to switch between different functionalities like recording, playback, and converting recording to MIDI files with assistance from LLM openai
 
 ## Features
 
