@@ -1,12 +1,12 @@
 import pygame
 import Adafruit_BBIO.GPIO as GPIO
 import time
+import openai
 
 # Initialize Pygame Mixer
 pygame.mixer.init(frequency=44100, size=-16, channels=2, buffer=1024) 
 
-# Instruments definition
-beep = 'note/beep.mp3'
+openai.api_key = "REMOVED_API_KEY_FOR_SECURITY_REASONS"
 
 instruments = {
     'piano': {
@@ -29,9 +29,21 @@ instruments = {
     }
 }
 
+PROMPT_MESSAGE = ("Create a Python script that converts recorded musical events into MIDI files using the 'mido' library. The script needs to accommodate two types of musical instruments: piano and guitar. The data for this script will be provided in a list of tuples, where each tuple represents a musical event. Each tuple contains three elements: the instrument type ('piano' or 'guitar'), the musical note (such as 'C', 'D', 'E' for piano, and specific notes like 'E', 'A', 'D', 'G', 'B', 'E' for guitar," 
+
+"reflecting typical tuning), and the time interval in seconds since the previous note was played. The MIDI note numbers should be mapped such that for piano, Middle C (C4) is MIDI number 60, and for guitar, the low E (E2) is MIDI number 40. The script should ensure that each note is played after the specified delay relative to the previous note, replicating the timing as it was originally recorded."
+
+"Additionally, the script should include functionality to save the generated MIDI file in the current directory under the name 'recording.mid'. Please also include a function to preload sounds for quick playback access during execution. The script should handle creating the MIDI file, adding events based on the provided list, saving the completed MIDI file, and provide error handling for common issues such as invalid note entries or unsupported instrument types."
+
+"Example data format for events: events = [('piano', 'C', 0.5), ('guitar', 'E', 1.0), ('piano', 'G', 0.5)]"
+
+"Please ensure the script is fully functional with the above specifications, including the actual events data provided here to demonstrate the expected input and output behavior.")
+
+LLM_MODEL = "gpt-4-turbo"
+
 # Current instrument
 current_instrument = 'piano'
-menu_options = ['Recording', 'Playback']
+menu_options = ['Recording', 'Playback', 'Generate MIDI']
 current_menu_index = 0  # Tracks which menu option is selected
 app_state = 'normal'  # Can be 'normal', 'menu', 'recording', 'playback'
 def menu_control():
@@ -50,6 +62,9 @@ def menu_control():
     elif app_state == 'playback':
         # Optionally handle stopping playback here if it's not automatically managed
         stop_playback()
+    elif app_state == 'midi':
+        # Optionally handle stopping midi generating here if it's not automatically managed
+        stop_generate_midi()
 
 def execute_selected_option():
     global current_menu_index, app_state
@@ -58,6 +73,8 @@ def execute_selected_option():
         start_recording()
     elif selected_option == 'Playback':
         start_playback()
+    elif selected_option == 'Generate MIDI':
+        start_generate_midi()
 
 def start_recording():
     global recording, app_state, events, last_press_time
@@ -85,6 +102,34 @@ def stop_playback():
     app_state = 'normal'
     # If there are any specific actions to stop playback, add them here
 
+def start_generate_midi():
+    global app_state, events
+    app_state = 'midi'
+    generate_midi(events)
+
+def generate_midi(events):
+    global app_state
+    message = PROMPT_MESSAGE + str(events)
+    print("communicating with openai API")
+    response = openai.Completion.create(engine=LLM_MODEL, prompt=message)
+    response_text = response.choices[0].text  # assuming this is your API response
+    print("response received, running exec on generated script")
+    filename = 'llm_midi.py'
+    
+    with open(filename, 'w') as file:
+        file.write(response_text)
+    with open(filename, 'r') as file:
+        script_content = file.read()
+        
+    exec(script_content)
+    print("midi file generation complete")
+    app_state = 'normal'
+
+    
+def stop_generate_midi():
+    global app_state
+    app_state = 'normal'
+
 def display_menu():
     global current_menu_index
     print("Menu:")
@@ -102,7 +147,7 @@ def play_note(sound):
 # Define note button functions to select menu options
 def note_button_pressed(note_name, sound):
     global current_menu_index, app_state
-    print(note_name, app_state)
+    #print(note_name, app_state)
     if app_state == 'menu':
         # Assume 'C' corresponds to the first menu option, etc.
         menu_index = 'CDEFGAB'.index(note_name)
@@ -120,15 +165,14 @@ def setup_gpio():
         # Ensure the lambda captures 'note_name' correctly by using it as a default argument
         GPIO.add_event_detect(note_info['pin'], GPIO.RISING, 
                               callback=lambda channel, note_name=note_name: note_button_pressed(note_name), 
-                              bouncetime=300)
+                              bouncetime=500)
 setup_gpio()
 
-# Menu/Recording button setup
 # Menu/Recording button setup
 menu_recording_pin = 'P8_17'
 GPIO.setup(menu_recording_pin, GPIO.IN)
 # Unified callback function for menu control and recording
-GPIO.add_event_detect(menu_recording_pin, GPIO.RISING, callback=lambda channel: menu_control(), bouncetime=300)
+GPIO.add_event_detect(menu_recording_pin, GPIO.RISING, callback=lambda channel: menu_control(), bouncetime=500)
 
 def menu_or_record_control():
     global app_state
@@ -149,7 +193,7 @@ def setup_notes():
         GPIO.remove_event_detect(note_info['pin'])  # Remove previous event detection
         GPIO.add_event_detect(note_info['pin'], GPIO.RISING,
                 callback=lambda channel, sound=pygame.mixer.Sound(note_info['file']), note_name=note_name: (note_button_pressed(note_name, sound), print(f"{current_instrument} Note pressed: {note_name}")),
-                              bouncetime=300)
+                              bouncetime=500)
 
 setup_notes()
 
@@ -165,7 +209,7 @@ def switch_instrument():
 # Setup the switch button
 instrument_pin = 'P8_18'
 GPIO.setup(instrument_pin, GPIO.IN)
-GPIO.add_event_detect(instrument_pin, GPIO.RISING, callback=lambda x: switch_instrument(), bouncetime=300)
+GPIO.add_event_detect(instrument_pin, GPIO.RISING, callback=lambda x: switch_instrument(), bouncetime=500)
 
 
 def play_note(sound):
@@ -222,5 +266,3 @@ except KeyboardInterrupt:
 finally:
     GPIO.cleanup()  # Clean up GPIO settings before exiting
     
-    
-#Could we include feature that parse an input audio signal and convert it into MIDI notes. Turn through an internal music sample and output as the sound of a different instrument. I think this is doable since the
