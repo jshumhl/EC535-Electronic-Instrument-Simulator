@@ -1,5 +1,6 @@
 # EC535 Final Project: Electronic Instrument Simulator
 ## Author: Team 13: Hin Lui Shum, Xulun Huang
+Unlisted Youtube Link: [https://youtu.be/dtELEZ3XwHg](https://youtu.be/dtELEZ3XwHg)
 
 ## Description
 This project is an electronic musical instrument using a BeagleBone Black that allows switching instrument between piano and guitar. An interactive menu controls to switch between different functionalities like recording, playback, and converting recording to MIDI files with assistance from LLM openai
