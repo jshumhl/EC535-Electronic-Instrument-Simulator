@@ -1,5 +1,6 @@
 # EC535 Final Project: Electronic Instrument Simulator
-# Author: Hin Lui Shum
+## Author: Team 13: Hin Lui Shum
+
 
 This final project is a electronic musical instrument using a BeagleBone Black that includes interactive menu controls to switch between different functionalities like recording, playback, and switching between instrument choices of piano and guitar.
 
