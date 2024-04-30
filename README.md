@@ -29,15 +29,36 @@ This final project is a electronic musical instrument using a BeagleBone Black t
 - Balena Etcher for flashing drives
 
 ## Setup and Installation
-With Debian 11.7 installed the login:password would be [debian:temppwd]. Python 3.X comes preinstalled. Follow the circuit below to set up the pins and circuit.
+With Debian 11.7 installed the login:password would be [debian:temppwd]. Python 3.X comes preinstalled.
 
-1. **Setup Circuit & Hardwares**:
+1. **Setup Speaker packages**:
+   sudo apt install alsa-utils
 
-2. **Setup Python Environment**:
+3. **Setup Python Environment**:
    pip3 install pygame RPi.GPIO
 
-3. **Clone the Repository**:
+4. **Clone the Repository**:
    git clone [https://github.com/yourgithub/yourproject.git](https://github.com/jshumhl/EC535_Project.git)
    
-4. **Running the Script:**:
+5. **Running the Script:**:
    python __main__.py
+
+## Wiring Configuration
+- Connect each button to a GPIO pin with a pull-down resistor to ground.
+- Connect the USB Speaker via the USB port on the BeagleBone Board
+- Follow the circuit below to set up the pins and circuit to the BeagleBone Board
+
+![BeagleBone Pinout](images/beaglebone.png)
+![Breadboard setup](images/breadboard_design.jpg)
+
+## Usage
+1. Start the Device: Run the script as outlined above. The system starts in normal mode with piano sounds by default.
+2. Change Instruments: Press the designated instrument switch button to toggle between the available instruments.
+3. Recording: Press the menu button to enter the menu, then use the C note to select "Recording" and press the menu button again to start recording. Press the menu button again to stop and save the recording.
+4. Playback: Navigate to "Playback" in the menu and select it to hear your recorded sequence.
+5. Menu Navigation: Use the note buttons (C, D, E, F, G, A, B) to navigate the menu options.
+
+## Troubleshooting
+- Ensure all connections are secure if the buttons do not seem to respond.
+- Check the console for error messages if the system behaves unexpectedly.
+- Run "speaker-test -c2 -twav -l7" to see if the speaker is functioning
