@@ -32,7 +32,7 @@ This final project is a electronic musical instrument using a BeagleBone Black t
 With Debian 11.7 installed the login:password would be [debian:temppwd]. Python 3.X comes preinstalled.
 
 1. **Setup Speaker packages**:
-   sudo apt install alsa-utils
+   - sudo apt install alsa-utils
 
 3. **Setup Python Environment**:
    - pip install pygame
@@ -42,10 +42,10 @@ With Debian 11.7 installed the login:password would be [debian:temppwd]. Python 
    - pip install mido
 
 5. **Clone the Repository**:
-   git clone [https://github.com/yourgithub/yourproject.git](https://github.com/jshumhl/EC535_Project.git)
+   - git clone [https://github.com/yourgithub/yourproject.git](https://github.com/jshumhl/EC535_Project.git)
    
 6. **Running the Script:**:
-   python __main__.py
+   - python main.py
 
 ## Wiring Configuration
 - Connect each button to a GPIO pin with a pull-down resistor to ground.
