@@ -17,6 +17,8 @@ This final project is a electronic musical instrument using a BeagleBone Black t
 - Push buttons for controls
 - 10k Ohms Resistors
 - USB port speaker
+- USB Hub (Optional)
+- USB Wifi Adapter (Optional)
 
 ## Software Requirements / Used
 - Am335x Debian 11.7
@@ -26,13 +28,15 @@ This final project is a electronic musical instrument using a BeagleBone Black t
 - Balena Etcher for flashing drives
 
 ## Setup and Installation
-With Debian 11.7 installed the login:password would be [debian:temppwd] 
-1. **Setup Python Environment**:
+With Debian 11.7 installed the login:password would be [debian:temppwd]. Python 3.X comes preinstalled. Follow the circuit below to set up the pins and circuit.
+
+1. **Setup Circuit & Hardwares**:
+
+2. **Setup Python Environment**:
    pip3 install pygame RPi.GPIO
 
-2. **Clone the Repository**:
-   git clone https://github.com/yourgithub/yourproject.git
-   cd yourproject
-
-3. **Running the Script:**:
+3. **Clone the Repository**:
+   git clone [https://github.com/yourgithub/yourproject.git](https://github.com/jshumhl/EC535_Project.git)
+   
+4. **Running the Script:**:
    python __main__.py
